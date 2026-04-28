@@ -1,0 +1,359 @@
+openapi: 3.0.3
+info:
+  title: Banking interview Test API
+  description: API para gestión de clientes, cuentas y movimientos
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8002
+
+tags:
+  - name: Customers
+  - name: Accounts
+  - name: Movements
+
+paths:
+
+  ########################
+  # CUSTOMERS SERVICE
+  ########################
+  /api/v1/customers:
+    get:
+      tags: [Customers]
+      summary: Listar clientes
+      responses:
+        '200':
+          description: Lista de clientes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Customer'
+
+    post:
+      tags: [Customers]
+      summary: Crear cliente
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerRequest'
+      responses:
+        '201':
+          description: Cliente creado
+
+  /api/v1/customers/{id}:
+    get:
+      tags: [Customers]
+      summary: Obtener cliente por ID
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '200':
+          description: Cliente encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+
+    put:
+      tags: [Customers]
+      summary: Actualizar cliente
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerRequest'
+      responses:
+        '200':
+          description: Cliente actualizado
+
+    delete:
+      tags: [Customers]
+      summary: Eliminar cliente
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '204':
+          description: Cliente eliminado
+
+
+  ########################
+  # ACCOUNTS SERVICE
+  ########################
+  /api/v1/accounts:
+    get:
+      tags: [Accounts]
+      summary: Listar cuentas
+      responses:
+        '200':
+          description: Lista de cuentas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Account'
+
+    post:
+      tags: [Accounts]
+      summary: Crear cuenta
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountRequest'
+      responses:
+        '201':
+          description: Cuenta creada
+
+  /api/v1/accounts/{id}:
+    get:
+      tags: [Accounts]
+      summary: Obtener cuenta por ID
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '200':
+          description: Cuenta encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+
+    put:
+      tags: [Accounts]
+      summary: Actualizar cuenta
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountRequest'
+      responses:
+        '200':
+          description: Cuenta actualizada
+
+    delete:
+      tags: [Accounts]
+      summary: Eliminar cuenta
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '204':
+          description: Cuenta eliminada
+
+
+  ########################
+  # MOVEMENTS SERVICE
+  ########################
+  /api/v1/movements:
+    get:
+      tags: [Movements]
+      summary: Listar movimientos
+      responses:
+        '200':
+          description: Lista de movimientos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Movement'
+
+    post:
+      tags: [Movements]
+      summary: Crear movimiento
+      description: Genera evento Kafka para actualizar saldo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MovementRequest'
+      responses:
+        '201':
+          description: Movimiento creado
+
+  /api/v1/movements/{id}:
+    get:
+      tags: [Movements]
+      summary: Obtener movimiento por ID
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '200':
+          description: Movimiento encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Movement'
+
+    delete:
+      tags: [Movements]
+      summary: Eliminar movimiento
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '204':
+          description: Movimiento eliminado
+
+
+components:
+
+  parameters:
+    IdParam:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: integer
+
+  schemas:
+
+    ########################
+    # CUSTOMER
+    ########################
+    Customer:
+      type: object
+      properties:
+        id:
+          type: integer
+        nombres:
+          type: string
+        direccion:
+          type: string
+        telefono:
+          type: string
+        contrasena:
+          type: string
+        estado:
+          type: boolean
+
+    CustomerRequest:
+      type: object
+      required:
+        - nombres
+        - direccion
+        - telefono
+      properties:
+        nombres:
+          type: string
+        direccion:
+          type: string
+        telefono:
+          type: string
+        contrasena:
+          type: string
+        estado:
+          type: boolean
+
+    ########################
+    # ACCOUNT
+    ########################
+    Account:
+      type: object
+      properties:
+        id:
+          type: integer
+        numeroCuenta:
+          type: string
+        tipo:
+          type: string
+          enum: [AHORRO, CORRIENTE]
+        saldoInicial:
+          type: number
+          format: double
+        estado:
+          type: boolean
+        clienteId:
+          type: integer
+
+    AccountRequest:
+      type: object
+      required:
+        - numeroCuenta
+        - tipo
+        - clienteId
+      properties:
+        numeroCuenta:
+          type: string
+        tipo:
+          type: string
+          enum: [AHORRO, CORRIENTE]
+        saldoInicial:
+          type: number
+        estado:
+          type: boolean
+        clienteId:
+          type: integer
+
+    ########################
+    # MOVEMENT
+    ########################
+    Movement:
+      type: object
+      properties:
+        id:
+          type: integer
+        numeroCuenta:
+          type: string
+        tipoCuenta:
+          type: string
+        saldoInicial:
+          type: number
+        movimiento:
+          type: string
+        valor:
+          type: number
+        saldo:
+          type: number
+        estado:
+          type: boolean
+        fecha:
+          type: string
+          format: date-time
+
+    MovementRequest:
+      type: object
+      required:
+        - numeroCuenta
+        - movimiento
+        - valor
+      properties:
+        numeroCuenta:
+          type: string
+        movimiento:
+          type: string
+          example: "RETIRO"
+        valor:
+          type: number
+        estado:
+          type: boolean
+
+    ########################
+    # EVENTOS KAFKA
+    ########################
+    AccountUpdatedEvent:
+      type: object
+      properties:
+        accountId:
+          type: integer
+        nuevoSaldo:
+          type: number
+
+    MovementCreatedEvent:
+      type: object
+      properties:
+        numeroCuenta:
+          type: string
+        tipo:
+          type: string
+        valor:
+          type: number

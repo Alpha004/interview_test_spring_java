@@ -12,7 +12,7 @@ import org.springframework.data.relational.core.mapping.Table;
 import java.util.Date;
 
 @Table(name = "Cliente")
-@Getter
+@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor(staticName = "of")
