@@ -2,6 +2,7 @@ package com.nttdata.alpaca.tech_test_spring.application.usecases;
 
 import org.springframework.stereotype.Component;
 
+import com.nttdata.alpaca.tech_test_spring.config.exceptions.custom.NotFoundException;
 import com.nttdata.alpaca.tech_test_spring.domain.models.Cliente;
 import com.nttdata.alpaca.tech_test_spring.domain.ports.in.GetClienteById;
 import com.nttdata.alpaca.tech_test_spring.domain.ports.out.ClienteRepositoryPort;
@@ -17,7 +18,8 @@ public class GetClienteByIdUseCaseImpl implements GetClienteById {
 
 	@Override
 	public Mono<Cliente> getClienteById(Long id) {
-		return clienteRepository.getClienteById(id);
+		return clienteRepository.getClienteById(id)
+				.switchIfEmpty(Mono.error(new NotFoundException("Cliente no encontrado con id: " + id)));
 	}
 
 }

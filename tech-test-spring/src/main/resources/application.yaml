@@ -5,11 +5,14 @@ spring:
     url: r2dbc:mysql://localhost:3306/pichincha_interv
     username: alpha
     password: Admin.123
+  kafka:
+    bootstrap-servers: localhost:9092
 
 app:
   kafka:
     topic:
       cliente-topic: cliente-topic
+      account-topic: account-topic
 
 eureka:
   instance:

@@ -17,7 +17,22 @@ public class UpdateClienteByIdUseCaseImpl implements UpdateClienteById {
 
 	@Override
 	public Mono<Cliente> updateCliente(Long id, Cliente cliente) {
-		return clienteRepository.updateCliente(id, cliente);
+		return clienteRepository.getClienteById(id)
+				.map(cli -> {
+					cli.setNombre(cliente.getNombre());
+					cli.setGenero(cliente.getGenero());
+					cli.setIdentificacion(cliente.getIdentificacion());
+					cli.setDireccion(cliente.getDireccion());
+					cli.setTelefono(cliente.getTelefono());
+					if (cliente.getContrasenia() != null) {
+						cli.setContrasenia(cliente.getContrasenia());
+					}
+					if (cliente.getEstado() != null) {
+						cli.setEstado(cliente.getEstado());
+					}
+					return cli;
+				})
+				.flatMap(updatedCliente -> clienteRepository.updateCliente(id, updatedCliente));
 	}
 
 }

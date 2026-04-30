@@ -24,23 +24,23 @@ public class ClienteService {
 	private final DeleteClienteByid deleteClienteById;
 
 	
-	private Flux<Cliente> getClients(Pageable page){
+	public Flux<Cliente> getClients(Pageable page){
 		return this.getAllClients.getAllClientes(page);
 	}
 	
-	private Mono<Cliente> saveCliente(Cliente cliente){
+	public Mono<Cliente> saveCliente(Cliente cliente){
 		return this.createNewCliente.saveCliente(cliente);
 	}
 	
-	private Mono<Cliente> getClienteById(Long id){
+	public Mono<Cliente> getClienteById(Long id){
 		return this.getClienteById.getClienteById(id);
 	}
 	
-	private Mono<Cliente> updateCliente(Cliente cliente, Long id){
+	public Mono<Cliente> updateCliente(Cliente cliente, Long id){
 		return this.updateClienteById.updateCliente(id, cliente);
 	}
 	
-	private Mono<Void> deleteCliente(Long id){
+	public Mono<Void> deleteCliente(Long id){
 		return this.deleteClienteById.deleteClienteById(id);
 	}
 	

@@ -34,12 +34,12 @@ public class ClienteMapper {
 
     public static Cliente fromRequestToDomain(ClienteRequest request) {
         return new Cliente(
-                request.nombre(),
-                request.genero(),
-                request.identificacion(),
-                request.direccion(),
-                request.telefono(),
-                PasswordEncoder.encode(request.contrasenia()),
+                request.getNombre(),
+                request.getGenero(),
+                request.getIdentificacion(),
+                request.getDireccion(),
+                request.getTelefono(),
+                PasswordEncoder.encode(request.getContrasenia()),
                 null
         );
     }

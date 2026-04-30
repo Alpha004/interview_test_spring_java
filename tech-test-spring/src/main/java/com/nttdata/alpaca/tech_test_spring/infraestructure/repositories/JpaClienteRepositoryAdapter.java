@@ -25,6 +25,7 @@ public class JpaClienteRepositoryAdapter implements ClienteRepositoryPort {
 
 	@Override
 	public Mono<Cliente> saveCliente(Cliente cliente) {
+		cliente.setEstado(true);
 		return this.clienteRepository.save(ClienteMapper.toEntity(cliente))
 				.map(ClienteMapper::fromEntitytoDomain);
 	}
