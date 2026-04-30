@@ -12,7 +12,52 @@ CREATE TABLE IF NOT EXISTS Cliente (
     -- creation_date DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT 'Fecha y hora de creacion del cliente en la bd'
 );
 
+-- =====================================
+-- TABLA: ACCOUNTS
+-- =====================================
+CREATE TABLE Accounts (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    numero_cuenta VARCHAR(20) NOT NULL UNIQUE,
+    tipo ENUM('AHORRO', 'CORRIENTE') NOT NULL,
+    saldo_inicial DECIMAL(12,2) NOT NULL,
+    estado BOOLEAN NOT NULL DEFAULT TRUE,
+    cliente_nombre VARCHAR(100) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Índice para búsquedas por cliente
+CREATE INDEX idx_accounts_cliente ON Accounts(cliente_nombre);
+
+
+-- =====================================
+-- TABLA: MOVEMENTS
+-- =====================================
+CREATE TABLE Movements (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    numero_cuenta VARCHAR(20) NOT NULL,
+    tipo_cuenta ENUM('AHORRO', 'CORRIENTE') NOT NULL,
+    saldo_inicial DECIMAL(12,2) NOT NULL,
+    valor DECIMAL(12,2) NOT NULL,
+    tipo_movimiento ENUM('DEPOSITO', 'RETIRO') NOT NULL,
+    saldo DECIMAL(12,2) NOT NULL,
+    estado BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    -- Relación con accounts
+    CONSTRAINT fk_movements_account
+        FOREIGN KEY (numero_cuenta)
+        REFERENCES Accounts(numero_cuenta)
+        ON DELETE CASCADE
+);
+
+-- Índices para performance
+CREATE INDEX idx_movements_numero_cuenta ON Movements(numero_cuenta);
+CREATE INDEX idx_movements_fecha ON Movements(created_at);
+
+
 DROP TABLE Cliente;
+DROP TABLE Accounts;
+DROP TABLE Movements;
 
 SELECT * FROM Cliente;
 
