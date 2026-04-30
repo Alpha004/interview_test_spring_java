@@ -40,7 +40,4 @@ public class ClienteEntity {
 
     @Column("estado")
     private Boolean estado;
-
-    @Column("creation_date")
-    private LocalDate creation_timestamp;
 }

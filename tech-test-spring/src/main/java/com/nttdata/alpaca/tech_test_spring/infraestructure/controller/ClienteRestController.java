@@ -3,6 +3,8 @@ package com.nttdata.alpaca.tech_test_spring.infraestructure.controller;
 import java.net.URI;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +32,7 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class ClienteRestController {
 	
+	private static final Logger LOGGER = LoggerFactory.getLogger(ClienteRestController.class);
 	private final ClienteService clienteService;
 	
 	@GetMapping
@@ -37,6 +40,8 @@ public class ClienteRestController {
 			@RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "10") int size) {
 		Pageable pageable = PageRequest.of(page, size);
+		
+		LOGGER.info("Iniciando consulta de clientes");
 		return this.clienteService.getClients(pageable)
 				.map(ClienteMapper::fromDomainToResponse)
 				.collectList()
@@ -45,6 +50,7 @@ public class ClienteRestController {
 	
 	@PostMapping
 	public Mono<ResponseEntity<ClienteResponse>> saveNewClient(@RequestBody @Valid ClienteRequest cliente){
+		LOGGER.info("Iniciando registro de nuevo cliente");
 		return this.clienteService.saveCliente(ClienteMapper.fromRequestToDomain(cliente))
 				.map(ClienteMapper::fromDomainToResponse)
 				.map(response -> ResponseEntity
@@ -54,6 +60,7 @@ public class ClienteRestController {
 	
 	@PutMapping("/{clientId}")
 	public Mono<ResponseEntity<ClienteResponse>> updateExistingClientById(@RequestBody @Valid ClienteRequest cliente, @PathVariable Long clientId){
+		LOGGER.info("Iniciando actualizacion de cliente existente");
 		return this.clienteService.updateCliente(ClienteMapper.fromRequestToDomain(cliente),clientId)
 				.map(ClienteMapper::fromDomainToResponse)
 				.map(response -> ResponseEntity.accepted().body(response));
@@ -61,12 +68,14 @@ public class ClienteRestController {
 	
 	@DeleteMapping("/{clientId}")
 	public Mono<ResponseEntity<Void>> deleteClientById(@PathVariable Long clientId){
+		LOGGER.info("Iniciando eliminacion de cliente existente");
 		return this.clienteService.deleteCliente(clientId)
-				.map(ResponseEntity::ok);
+				.then(Mono.just(ResponseEntity.noContent().build()));
 	}
 	
 	@GetMapping("/{clientId}")
 	public Mono<ResponseEntity<ClienteResponse>> getClientById(@PathVariable Long clientId){
+		LOGGER.info("Iniciando busqueda de cliente por Id");
 		return this.clienteService.getClienteById(clientId)
 				.map(ClienteMapper::fromDomainToResponse)
 				.map(ResponseEntity::ok);

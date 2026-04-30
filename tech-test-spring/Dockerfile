@@ -1,14 +1,11 @@
-FROM eclipse-temurin:21-jdk AS build
-WORKDIR /app
-COPY tech-test-spring/pom.xml tech-test-spring/pom.xml
-COPY tech-test-spring/src tech-test-spring/src
-COPY tech-test-spring/mvnw tech-test-spring/mvnw
-COPY tech-test-spring/.mvn tech-test-spring/.mvn
-WORKDIR /app/tech-test-spring
-RUN ./mvnw package -DskipTests
+FROM maven:3.9.6-eclipse-temurin-21-alpine as builder
+COPY pom.xml .
+COPY src ./src
+RUN mvn clean package -DskipTests && \
+    rm -rf /root/.m2
 
-FROM eclipse-temurin:21-jre
+FROM gcr.io/distroless/java21-debian12
 WORKDIR /app
-COPY --from=build /app/tech-test-spring/target/*.jar app.jar
+COPY --from=builder /target/*.jar application.jar
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]

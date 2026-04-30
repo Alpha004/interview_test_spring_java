@@ -8,8 +8,8 @@ CREATE TABLE IF NOT EXISTS Cliente (
     contrasenia VARCHAR(100) NOT NULL,
     estado BIT NOT NULL DEFAULT 1,
     telefono VARCHAR(20) NOT NULL,    
-    direccion VARCHAR(255) NOT NULL,
-    creation_date DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT 'Fecha y hora de creacion del cliente en la bd'
+    direccion VARCHAR(255) NOT NULL
+    -- creation_date DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT 'Fecha y hora de creacion del cliente en la bd'
 );
 
 DROP TABLE Cliente;

@@ -1,9 +1,12 @@
 package com.nttdata.alpaca.tech_test_spring.infraestructure.repositories;
 
+import java.time.Duration;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import com.nttdata.alpaca.tech_test_spring.application.mapper.ClienteMapper;
+import com.nttdata.alpaca.tech_test_spring.config.exceptions.custom.NotFoundException;
 import com.nttdata.alpaca.tech_test_spring.domain.models.Cliente;
 import com.nttdata.alpaca.tech_test_spring.domain.ports.out.ClienteRepositoryPort;
 import com.nttdata.alpaca.tech_test_spring.infraestructure.entities.ClienteEntity;
@@ -20,7 +23,8 @@ public class JpaClienteRepositoryAdapter implements ClienteRepositoryPort {
 	@Override
 	public Flux<Cliente> getAllClientes(Pageable pageable) {
 		// TODO Auto-generated method stub
-		return this.clienteRepository.findAllPageable(pageable).map(ClienteMapper::fromEntitytoDomain);
+		return this.clienteRepository.findAllPageable(pageable).map(ClienteMapper::fromEntitytoDomain)
+				.cache(Duration.ofMinutes(1));
 	}
 
 	@Override
@@ -39,12 +43,15 @@ public class JpaClienteRepositoryAdapter implements ClienteRepositoryPort {
 
 	@Override
 	public Mono<Cliente> getClienteById(Long id) {
-		return this.clienteRepository.findById(id).map(ClienteMapper::fromEntitytoDomain);
+		return this.clienteRepository.findById(id).map(ClienteMapper::fromEntitytoDomain)
+				.cache(Duration.ofMinutes(1));
 	}
 
 	@Override
 	public Mono<Void> deleteClienteById(Long id) {
-		return this.clienteRepository.deleteById(id);
+		return this.clienteRepository.findById(id)
+				.switchIfEmpty(Mono.error(new NotFoundException("Cliente no encontrado con id: " + id)))
+				.flatMap(entity -> this.clienteRepository.deleteById(id));
 	}
 
 }

@@ -29,7 +29,7 @@ public class UpdateClienteByIdUseCaseImpl implements UpdateClienteById {
 					}
 					if (cliente.getEstado() != null) {
 						cli.setEstado(cliente.getEstado());
-					}
+					}					
 					return cli;
 				})
 				.flatMap(updatedCliente -> clienteRepository.updateCliente(id, updatedCliente));

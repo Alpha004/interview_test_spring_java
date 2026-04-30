@@ -77,35 +77,7 @@ public class GlobalExceptionHandler {
         return Mono.just(ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(error));
-    }
-
-//    @ExceptionHandler(DuplicateAlumnoException.class)
-//    public Mono<ResponseEntity<ErrorResponse>> handleInvalidEnum(DuplicateAlumnoException ex, ServerHttpRequest request) {
-//        ErrorResponse error = new ErrorResponse(
-//                HttpStatus.CONFLICT.value(),
-//                ex.getMessage(),
-//                request.getPath().value(),
-//                Instant.now()
-//        );
-//        return Mono.just(ResponseEntity
-//                .status(HttpStatus.CONFLICT)
-//                .body(error));
-//    }
-
-    @ExceptionHandler(ServerWebInputException.class)
-    public Mono<ResponseEntity<ErrorResponse>> handleServerWebInput(
-            ServerWebInputException ex, ServerHttpRequest request) {
-
-        ErrorResponse error = new ErrorResponse(
-                HttpStatus.BAD_REQUEST.value(),
-                "Valor inválido para el campo estado, solo se permiten ACTIVO/INACTIVO",
-                request.getPath().value(),
-                Instant.now()
-        );
-        return Mono.just(ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(error));
-    }
+    }    
 
     @ExceptionHandler(WebExchangeBindException.class)
     public Mono<ResponseEntity<ErrorResponse>> handleValidationExceptions(WebExchangeBindException ex, ServerHttpRequest request) {

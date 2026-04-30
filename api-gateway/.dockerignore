@@ -1,0 +1,7 @@
+**/target/
+**/.git/
+**/.mvn/
+**/*.md
+**/Dockerfile*
+**/docker-compose*
+**/README
