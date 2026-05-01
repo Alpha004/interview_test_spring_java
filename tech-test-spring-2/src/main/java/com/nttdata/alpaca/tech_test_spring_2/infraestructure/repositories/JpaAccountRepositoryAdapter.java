@@ -1,8 +1,11 @@
 package com.nttdata.alpaca.tech_test_spring_2.infraestructure.repositories;
 
 import com.nttdata.alpaca.tech_test_spring_2.application.mapper.AccountMapper;
+import com.nttdata.alpaca.tech_test_spring_2.config.exceptions.custom.NotFoundException;
 import com.nttdata.alpaca.tech_test_spring_2.domain.models.Account;
 import com.nttdata.alpaca.tech_test_spring_2.domain.ports.out.AccountRepositoryPort;
+import com.nttdata.alpaca.tech_test_spring_2.infraestructure.entities.AccountEntity;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
@@ -19,7 +22,7 @@ public class JpaAccountRepositoryAdapter implements AccountRepositoryPort {
 
     @Override
     public Flux<Account> getAllAccounts(Pageable pageable) {
-        return accountRepository.findAllPaginated(pageable.getPageSize(), (int) pageable.getOffset())
+        return accountRepository.findAllPaginated(pageable)
                 .map(AccountMapper::fromEntitytoDomain);
     }
 
@@ -49,6 +52,8 @@ public class JpaAccountRepositoryAdapter implements AccountRepositoryPort {
 
     @Override
     public Mono<Void> deleteAccountById(Long id) {
-        return accountRepository.deleteById(id);
+        return accountRepository.findById(id)
+        		.switchIfEmpty(Mono.error(new NotFoundException("Cliente no encontrado con id: " + id)))
+				.flatMap(entity -> this.accountRepository.deleteById(id));
     }
 }

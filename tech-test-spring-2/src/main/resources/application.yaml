@@ -1,6 +1,6 @@
 spring:
   application:
-    name: tech-test-spring
+    name: tech-test-spring-2
   r2dbc:
     url: r2dbc:mysql://localhost:3306/pichincha_interv
     username: alpha
@@ -15,6 +15,9 @@ app:
       account-topic: account-topic
 
 eureka:
+#  instance:
+#    prefer-ip-address: true
+#    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
   client:
     fetch-registry: true
     register-with-eureka: true

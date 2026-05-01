@@ -11,7 +11,7 @@
 	<groupId>com.cibertec.edu</groupId>
 	<artifactId>eureka-server</artifactId>
 	<version>1.0.0</version>
-	<name>eureka-server</name>
+	<name>tech-test-eureka-server</name>
 	<description>Ejemplo de API con Spring Cloud Eureka Server y Load Balancer</description>
 	<url/>
 	<licenses>

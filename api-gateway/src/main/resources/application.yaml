@@ -10,10 +10,20 @@ spring:
               enabled: true
               lower-case-service-id: true
           routes:
-            - id: tech-test-spring
+            - id: customers-route
               uri: lb://tech-test-spring
               predicates:
-                - Path=/v1/api/customers/**              
+                - Path=/v1/api/customers/**
+
+            - id: accounts-route
+              uri: lb://tech-test-spring-2
+              predicates:
+                - Path=/v1/api/accounts/**
+
+            - id: movements-route
+              uri: lb://tech-test-spring-2
+              predicates:
+                - Path=/v1/api/movements/**             
 server:
   port: 8009
 management:
@@ -34,5 +44,5 @@ eureka:
     fetch-registry: true
     register-with-eureka: true
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://eureka-server:8761/eureka
                 

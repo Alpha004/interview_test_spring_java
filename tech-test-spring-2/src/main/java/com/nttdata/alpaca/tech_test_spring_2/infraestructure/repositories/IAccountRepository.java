@@ -11,8 +11,8 @@ import reactor.core.publisher.Mono;
 @Repository
 public interface IAccountRepository extends ReactiveCrudRepository<AccountEntity, Long> {
 
-    @Query("SELECT * FROM Accounts LIMIT :limit OFFSET :offset")
-    Flux<AccountEntity> findAllPaginated(int limit, int offset);
+    @Query("SELECT * FROM Accounts LIMIT :#{#pageable.pageSize} OFFSET :#{#pageable.offset}")
+    Flux<AccountEntity> findAllPaginated(Pageable pageable);
 
-    Mono<AccountEntity> findByNumeroCuenta(String numeroCuenta);
+    Mono<AccountEntity> findAllByNumeroCuenta(String numeroCuenta);
 }

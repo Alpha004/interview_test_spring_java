@@ -3,8 +3,12 @@ package com.nttdata.alpaca.tech_test_spring_2.infraestructure.controller;
 import com.nttdata.alpaca.tech_test_spring_2.application.mapper.MovementMapper;
 import com.nttdata.alpaca.tech_test_spring_2.application.services.MovementService;
 import com.nttdata.alpaca.tech_test_spring_2.domain.models.Movement;
+import com.nttdata.alpaca.tech_test_spring_2.infraestructure.dto.LastMovementResponse;
 import com.nttdata.alpaca.tech_test_spring_2.infraestructure.dto.MovementRequest;
 import com.nttdata.alpaca.tech_test_spring_2.infraestructure.dto.MovementResponse;
+
+import jakarta.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
@@ -34,9 +38,15 @@ public class MovementRestController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Mono<MovementResponse> createMovement(@RequestBody MovementRequest request) {
+    public Mono<MovementResponse> createMovement(@RequestBody @Valid MovementRequest request) {
         Movement movement = MovementMapper.fromRequestToDomain(request);
         return movementService.saveMovement(movement)
                 .map(MovementMapper::fromDomainToResponse);
+    }
+
+    @GetMapping("/account/{numeroCuenta}/last")
+    public Mono<LastMovementResponse> getLastMovementByAccount(@PathVariable String numeroCuenta) {
+        return movementService.getLastMovementByAccount(numeroCuenta)
+                .map(MovementMapper::fromDomainToLastMovementResponse);
     }
 }

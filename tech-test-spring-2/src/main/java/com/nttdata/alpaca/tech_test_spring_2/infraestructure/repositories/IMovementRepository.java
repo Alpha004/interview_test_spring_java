@@ -14,4 +14,7 @@ public interface IMovementRepository extends ReactiveCrudRepository<MovementEnti
 
     @Query("SELECT * FROM Movements WHERE numero_cuenta = :numeroCuenta ORDER BY created_at DESC")
     Flux<MovementEntity> findMovementsByAccountOrdered(String numeroCuenta);
+
+    @Query("SELECT * FROM Movements WHERE numero_cuenta = :numeroCuenta ORDER BY created_at DESC LIMIT 1")
+    Mono<MovementEntity> findLastMovementByAccount(String numeroCuenta);
 }

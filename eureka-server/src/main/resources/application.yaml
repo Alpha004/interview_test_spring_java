@@ -9,7 +9,7 @@ eureka:
   server:
     wait-time-in-ms-when-sync-empty: 0
   instance:
-    hostname: localhost
+    hostname: eureka-server
   client:
     fetch-registry: false
     register-with-eureka: false

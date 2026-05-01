@@ -5,6 +5,12 @@ import com.nttdata.alpaca.tech_test_spring_2.application.services.AccountService
 import com.nttdata.alpaca.tech_test_spring_2.domain.models.Account;
 import com.nttdata.alpaca.tech_test_spring_2.infraestructure.dto.AccountRequest;
 import com.nttdata.alpaca.tech_test_spring_2.infraestructure.dto.AccountResponse;
+
+import jakarta.validation.Valid;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +21,7 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/v1/api/accounts")
 public class AccountRestController {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(AccountRestController.class);
     private final AccountService accountService;
 
     public AccountRestController(AccountService accountService) {
@@ -22,7 +29,12 @@ public class AccountRestController {
     }
 
     @GetMapping
-    public Flux<AccountResponse> getAllAccounts(Pageable pageable) {
+    public Flux<AccountResponse> getAllAccounts(
+			@RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "10") int size) {
+    	Pageable pageable = PageRequest.of(page, size);
+		
+		LOGGER.info("Iniciando consulta de clientes");
         return accountService.getAccounts(pageable)
                 .map(AccountMapper::fromDomainToResponse);
     }
@@ -35,7 +47,7 @@ public class AccountRestController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Mono<AccountResponse> createAccount(@RequestBody AccountRequest request) {
+    public Mono<AccountResponse> createAccount(@RequestBody @Valid AccountRequest request) {
         Account account = AccountMapper.fromRequestToDomain(request);
         return accountService.saveAccount(account)
                 .map(AccountMapper::fromDomainToResponse);
