@@ -54,4 +54,10 @@ public class JpaClienteRepositoryAdapter implements ClienteRepositoryPort {
 				.flatMap(entity -> this.clienteRepository.deleteById(id));
 	}
 
+	@Override
+	public Mono<Cliente> getClienteByNombre(String nombre) {
+		return this.clienteRepository.findByNombre(nombre).map(ClienteMapper::fromEntitytoDomain)
+				.cache(Duration.ofMinutes(1));
+	}
+
 }

@@ -42,4 +42,9 @@ public class JpaMovementRepositoryAdapter implements MovementRepositoryPort {
         return movementRepository.findLastMovementByAccount(numeroCuenta)
                 .map(MovementMapper::fromEntitytoDomain);
     }
+
+    @Override
+    public Mono<Long> countMovementsByAccount(String numeroCuenta) {
+        return movementRepository.countMovementsByAccount(numeroCuenta);
+    }
 }

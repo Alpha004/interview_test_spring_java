@@ -2,7 +2,9 @@ package com.nttdata.alpaca.tech_test_spring.application.mapper;
 
 import com.nttdata.alpaca.tech_test_spring.config.encrypt.PasswordEncoder;
 import com.nttdata.alpaca.tech_test_spring.domain.models.Cliente;
+import com.nttdata.alpaca.tech_test_spring.domain.models.ReportCustomerMovement;
 import com.nttdata.alpaca.tech_test_spring.infraestructure.entities.ClienteEntity;
+import com.nttdata.alpaca.tech_test_spring.infraestructure.dto.MovementEventDTO;
 import com.nttdata.alpaca.tech_test_spring.infraestructure.dto.ClienteRequest;
 import com.nttdata.alpaca.tech_test_spring.infraestructure.dto.ClienteResponse;
 
@@ -53,5 +55,18 @@ public class ClienteMapper {
                 cliente.getTelefono(),
                 cliente.getEstado()
         );
+    }
+    
+    public static ReportCustomerMovement fromAccountEventToEntity(MovementEventDTO accountEvent) {
+    	return ReportCustomerMovement.builder()				
+				.cliente(accountEvent.getCliente())
+				.numeroCuenta(accountEvent.getNumeroCuenta())
+				.tipo(accountEvent.getTipo())
+				.saldoInicial(accountEvent.getSaldoInicial())
+				.valorMovimiento(accountEvent.getValor())
+				.tipoMovimiento(accountEvent.getTipoMovimiento())
+				.saldoDisponible(accountEvent.getSaldo())
+				.estado(true)
+				.build();
     }
 }

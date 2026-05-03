@@ -77,6 +77,11 @@
 			<artifactId>brave-instrumentation-okhttp3</artifactId>
 		</dependency>
 		<dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>            
+            <scope>compile</scope>
+        </dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator-test</artifactId>
 			<scope>test</scope>

@@ -1,8 +1,13 @@
 package com.nttdata.alpaca.tech_test_spring_2.application.mapper;
 
+import java.math.BigDecimal;
+
 import com.nttdata.alpaca.tech_test_spring_2.config.utils.TipoMovement;
+import com.nttdata.alpaca.tech_test_spring_2.config.utils.Utils;
 import com.nttdata.alpaca.tech_test_spring_2.domain.models.Movement;
 import com.nttdata.alpaca.tech_test_spring_2.infraestructure.entities.MovementEntity;
+import com.nttdata.alpaca.tech_test_spring_2.infraestructure.dto.MovementEventDTO;
+import com.nttdata.alpaca.tech_test_spring_2.infraestructure.dto.LastMovementResponse;
 import com.nttdata.alpaca.tech_test_spring_2.infraestructure.dto.MovementRequest;
 import com.nttdata.alpaca.tech_test_spring_2.infraestructure.dto.MovementResponse;
 
@@ -53,9 +58,22 @@ public class MovementMapper {
         		movement.getSaldo());
     }
 
-    public static com.nttdata.alpaca.tech_test_spring_2.infraestructure.dto.LastMovementResponse fromDomainToLastMovementResponse(Movement movement) {
-        return new com.nttdata.alpaca.tech_test_spring_2.infraestructure.dto.LastMovementResponse(
+    public static LastMovementResponse fromDomainToLastMovementResponse(Movement movement) {
+        return new LastMovementResponse(
         		movement.getSaldo(),
         		movement.getTipoCuenta());
+    }
+    
+    public static MovementEventDTO fromDomainToEvent(Movement movement) {
+    	MovementEventDTO event = new MovementEventDTO();
+    	event.setEvent(Utils.NEW_MOVEMENT_CREATED_EVENT);
+    	event.setCliente(null);
+    	event.setNumeroCuenta(movement.getNumeroCuenta());
+    	event.setTipo(movement.getTipoCuenta());
+    	event.setSaldoInicial(BigDecimal.valueOf(movement.getSaldoInicial()));
+    	event.setValor(BigDecimal.valueOf(movement.getValor()));
+    	event.setSaldo(BigDecimal.valueOf(movement.getSaldo()));
+    	event.setTipoMovimiento(movement.getTipoMovimiento().toString());
+    	return event;
     }
 }

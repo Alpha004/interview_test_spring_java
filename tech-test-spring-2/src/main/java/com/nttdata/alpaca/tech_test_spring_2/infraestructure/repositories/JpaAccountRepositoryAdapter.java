@@ -51,6 +51,12 @@ public class JpaAccountRepositoryAdapter implements AccountRepositoryPort {
     }
 
     @Override
+    public Mono<Account> getAccountByNumeroCuenta(String numeroCuenta) {
+        return accountRepository.findAllByNumeroCuenta(numeroCuenta)
+                .map(AccountMapper::fromEntitytoDomain);
+    }
+
+    @Override
     public Mono<Void> deleteAccountById(Long id) {
         return accountRepository.findById(id)
         		.switchIfEmpty(Mono.error(new NotFoundException("Cliente no encontrado con id: " + id)))

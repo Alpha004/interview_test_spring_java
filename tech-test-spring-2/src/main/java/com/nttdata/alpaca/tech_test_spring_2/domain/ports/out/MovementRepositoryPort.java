@@ -9,4 +9,5 @@ public interface MovementRepositoryPort {
     Mono<Movement> getMovementById(Long id);
     Flux<Movement> getMovementsByAccount(String numeroCuenta);
     Mono<Movement> getLastMovementByAccount(String numeroCuenta);
+    Mono<Long> countMovementsByAccount(String numeroCuenta);
 }

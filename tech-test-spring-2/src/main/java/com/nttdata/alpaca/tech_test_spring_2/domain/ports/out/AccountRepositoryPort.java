@@ -10,5 +10,6 @@ public interface AccountRepositoryPort {
     Mono<Account> saveAccount(Account account);
     Mono<Account> updateAccount(Long id, Account account);
     Mono<Account> getAccountById(Long id);
+    Mono<Account> getAccountByNumeroCuenta(String numeroCuenta);
     Mono<Void> deleteAccountById(Long id);
 }

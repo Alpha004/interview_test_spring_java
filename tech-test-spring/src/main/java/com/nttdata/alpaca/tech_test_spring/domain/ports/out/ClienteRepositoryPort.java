@@ -11,5 +11,6 @@ public interface ClienteRepositoryPort {
     Mono<Cliente> saveCliente(Cliente cliente);
     Mono<Cliente> updateCliente(Long id, Cliente cliente);
     Mono<Cliente> getClienteById(Long id);
+    Mono<Cliente> getClienteByNombre(String nombre);
     Mono<Void> deleteClienteById(Long id);
 }

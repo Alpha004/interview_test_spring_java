@@ -7,12 +7,13 @@ spring:
     password: Admin.123
   kafka:
     bootstrap-servers: localhost:9092
+server:
+  port: 8081
 
 app:
   kafka:
     topic:
-      cliente-topic: cliente-topic
-      account-topic: account-topic
+      cliente-topic: cliente-topic      
 
 eureka:
 #  instance:
