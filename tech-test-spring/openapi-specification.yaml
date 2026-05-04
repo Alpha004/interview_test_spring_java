@@ -1,26 +1,29 @@
 openapi: 3.0.3
 info:
-  title: Banking interview Test API
-  description: API para gestión de clientes, cuentas y movimientos
+  title: Customer Service API
+  description: API para gestión de clientes y generación de reportes
   version: 1.0.0
-
 servers:
-  - url: http://localhost:8002
-
+  - url: http://localhost:8080
 tags:
   - name: Customers
-  - name: Accounts
-  - name: Movements
-
+  - name: Reports
 paths:
-
-  ########################
-  # CUSTOMERS SERVICE
-  ########################
-  /api/v1/customers:
+  /v1/api/customers:
     get:
       tags: [Customers]
-      summary: Listar clientes
+      summary: Listar clientes (paginado)
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          schema:
+            type: integer
+            default: 10
       responses:
         '200':
           description: Lista de clientes
@@ -29,8 +32,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Customer'
-
+                  $ref: '#/components/schemas/ClienteResponse'
     post:
       tags: [Customers]
       summary: Crear cliente
@@ -39,321 +41,165 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CustomerRequest'
+              $ref: '#/components/schemas/ClienteRequest'
       responses:
         '201':
           description: Cliente creado
-
-  /api/v1/customers/{id}:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClienteResponse'
+  /v1/api/customers/{clientId}:
     get:
       tags: [Customers]
       summary: Obtener cliente por ID
       parameters:
-        - $ref: '#/components/parameters/IdParam'
+        - name: clientId
+          in: path
+          required: true
+          schema:
+            type: integer
       responses:
         '200':
           description: Cliente encontrado
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Customer'
-
+                $ref: '#/components/schemas/ClienteResponse'
     put:
       tags: [Customers]
       summary: Actualizar cliente
       parameters:
-        - $ref: '#/components/parameters/IdParam'
+        - name: clientId
+          in: path
+          required: true
+          schema:
+            type: integer
       requestBody:
+        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CustomerRequest'
+              $ref: '#/components/schemas/ClienteRequest'
       responses:
         '200':
           description: Cliente actualizado
-
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClienteResponse'
     delete:
       tags: [Customers]
       summary: Eliminar cliente
       parameters:
-        - $ref: '#/components/parameters/IdParam'
+        - name: clientId
+          in: path
+          required: true
+          schema:
+            type: integer
       responses:
         '204':
           description: Cliente eliminado
-
-
-  ########################
-  # ACCOUNTS SERVICE
-  ########################
-  /api/v1/accounts:
+  /v1/api/customers/reports/{clienteId}:
     get:
-      tags: [Accounts]
-      summary: Listar cuentas
+      tags: [Reports]
+      summary: Generar reporte de movimientos
+      parameters:
+        - name: clienteId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: startDate
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+            example: "2024-01-01"
+        - name: endDate
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+            example: "2024-12-31"
+        - name: format
+          in: query
+          schema:
+            type: string
+            enum: [json, excel]
+            default: json
       responses:
         '200':
-          description: Lista de cuentas
+          description: Reporte generado
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Account'
-
-    post:
-      tags: [Accounts]
-      summary: Crear cuenta
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AccountRequest'
-      responses:
-        '201':
-          description: Cuenta creada
-
-  /api/v1/accounts/{id}:
-    get:
-      tags: [Accounts]
-      summary: Obtener cuenta por ID
-      parameters:
-        - $ref: '#/components/parameters/IdParam'
-      responses:
-        '200':
-          description: Cuenta encontrada
-          content:
-            application/json:
+                  $ref: '#/components/schemas/ReportItem'
+            application/octet-stream:
               schema:
-                $ref: '#/components/schemas/Account'
-
-    put:
-      tags: [Accounts]
-      summary: Actualizar cuenta
-      parameters:
-        - $ref: '#/components/parameters/IdParam'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AccountRequest'
-      responses:
-        '200':
-          description: Cuenta actualizada
-
-    delete:
-      tags: [Accounts]
-      summary: Eliminar cuenta
-      parameters:
-        - $ref: '#/components/parameters/IdParam'
-      responses:
-        '204':
-          description: Cuenta eliminada
-
-
-  ########################
-  # MOVEMENTS SERVICE
-  ########################
-  /api/v1/movements:
-    get:
-      tags: [Movements]
-      summary: Listar movimientos
-      responses:
-        '200':
-          description: Lista de movimientos
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Movement'
-
-    post:
-      tags: [Movements]
-      summary: Crear movimiento
-      description: Genera evento Kafka para actualizar saldo
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/MovementRequest'
-      responses:
-        '201':
-          description: Movimiento creado
-
-  /api/v1/movements/{id}:
-    get:
-      tags: [Movements]
-      summary: Obtener movimiento por ID
-      parameters:
-        - $ref: '#/components/parameters/IdParam'
-      responses:
-        '200':
-          description: Movimiento encontrado
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Movement'
-
-    delete:
-      tags: [Movements]
-      summary: Eliminar movimiento
-      parameters:
-        - $ref: '#/components/parameters/IdParam'
-      responses:
-        '204':
-          description: Movimiento eliminado
-
-
+                type: string
+                format: binary
 components:
-
-  parameters:
-    IdParam:
-      name: id
-      in: path
-      required: true
-      schema:
-        type: integer
-
   schemas:
-
-    ########################
-    # CUSTOMER
-    ########################
-    Customer:
+    ClienteRequest:
+      type: object
+      required: [nombre, genero, identificacion]
+      properties:
+        nombre:
+          type: string
+          minLength: 2
+          maxLength: 100
+          pattern: '^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$'
+        genero:
+          type: string
+        identificacion:
+          type: string
+          pattern: '^[0-9]{8}$'
+          maxLength: 8
+        direccion:
+          type: string
+        telefono:
+          type: string
+          pattern: '^9\d{8}$'
+        contrasenia:
+          type: string
+          minLength: 8
+          pattern: '^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$'
+        estado:
+          type: boolean
+    ClienteResponse:
       type: object
       properties:
-        id:
-          type: integer
-        nombres:
+        nombre:
+          type: string
+        genero:
+          type: string
+        identificacion:
           type: string
         direccion:
           type: string
         telefono:
           type: string
-        contrasena:
-          type: string
         estado:
           type: boolean
-
-    CustomerRequest:
-      type: object
-      required:
-        - nombres
-        - direccion
-        - telefono
-      properties:
-        nombres:
-          type: string
-        direccion:
-          type: string
-        telefono:
-          type: string
-        contrasena:
-          type: string
-        estado:
-          type: boolean
-
-    ########################
-    # ACCOUNT
-    ########################
-    Account:
+    ReportItem:
       type: object
       properties:
-        id:
-          type: integer
+        cliente:
+          type: string
         numeroCuenta:
           type: string
         tipo:
           type: string
-          enum: [AHORRO, CORRIENTE]
         saldoInicial:
           type: number
-          format: double
-        estado:
-          type: boolean
-        clienteId:
-          type: integer
-
-    AccountRequest:
-      type: object
-      required:
-        - numeroCuenta
-        - tipo
-        - clienteId
-      properties:
-        numeroCuenta:
-          type: string
-        tipo:
-          type: string
-          enum: [AHORRO, CORRIENTE]
-        saldoInicial:
+        valorMovimiento:
           type: number
-        estado:
-          type: boolean
-        clienteId:
-          type: integer
-
-    ########################
-    # MOVEMENT
-    ########################
-    Movement:
-      type: object
-      properties:
-        id:
-          type: integer
-        numeroCuenta:
+        tipoMovimiento:
           type: string
-        tipoCuenta:
-          type: string
-        saldoInicial:
-          type: number
-        movimiento:
-          type: string
-        valor:
-          type: number
-        saldo:
-          type: number
-        estado:
-          type: boolean
-        fecha:
-          type: string
-          format: date-time
-
-    MovementRequest:
-      type: object
-      required:
-        - numeroCuenta
-        - movimiento
-        - valor
-      properties:
-        numeroCuenta:
-          type: string
-        movimiento:
-          type: string
-          example: "RETIRO"
-        valor:
-          type: number
-        estado:
-          type: boolean
-
-    ########################
-    # EVENTOS KAFKA
-    ########################
-    AccountUpdatedEvent:
-      type: object
-      properties:
-        accountId:
-          type: integer
-        nuevoSaldo:
-          type: number
-
-    MovementCreatedEvent:
-      type: object
-      properties:
-        numeroCuenta:
-          type: string
-        tipo:
-          type: string
-        valor:
+        saldoDisponible:
           type: number
