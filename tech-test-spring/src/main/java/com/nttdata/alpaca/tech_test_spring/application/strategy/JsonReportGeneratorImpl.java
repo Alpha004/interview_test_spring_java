@@ -13,8 +13,12 @@ public class JsonReportGeneratorImpl implements IReportGenerator {
 
 	@Override
 	public Mono<Object> generate(List<ReportItem> data) {
-		// TODO Auto-generated method stub
 		return Mono.just(data);
+	}
+
+	@Override
+	public boolean supports(String format) {
+		return "json".equalsIgnoreCase(format);
 	}
 
 }

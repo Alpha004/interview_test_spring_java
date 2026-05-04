@@ -2,9 +2,11 @@ package com.nttdata.alpaca.tech_test_spring.infraestructure.dto;
 
 import java.time.LocalDate;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 public class ReportItem {
 	private LocalDate fecha;
     private String cliente;

@@ -1,10 +1,12 @@
 package com.nttdata.alpaca.tech_test_spring.infraestructure.repositories;
 
+import java.time.LocalDateTime;
+
 import org.springframework.stereotype.Component;
 
+import com.nttdata.alpaca.tech_test_spring.application.mapper.ReportCustomerMovementMapper;
 import com.nttdata.alpaca.tech_test_spring.domain.models.ReportCustomerMovement;
 import com.nttdata.alpaca.tech_test_spring.domain.ports.out.ReportCustomerMovementRepositoryPort;
-import com.nttdata.alpaca.tech_test_spring.infraestructure.entities.ReportCustomerMovementEntity;
 
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
@@ -18,47 +20,19 @@ public class JpaReportCustomerMovementRepositoryAdapter implements ReportCustome
 
     @Override
     public Mono<ReportCustomerMovement> save(ReportCustomerMovement movement) {
-        return repository.save(toEntity(movement))
-                .map(this::fromEntityToDomain);
+        return repository.save(ReportCustomerMovementMapper.toEntity(movement))
+                .map(ReportCustomerMovementMapper::fromEntityToDomain);
     }
 
-    @Override
-    public Flux<ReportCustomerMovement> findByClienteId(Long clienteId) {
-        return repository.findByClienteId(clienteId)
-                .map(this::fromEntityToDomain);
-    }
+	@Override
+	public Flux<ReportCustomerMovement> getAllMovementsByCustomerName(String customerName) {
+		return repository.findByCliente(customerName)
+				.map(ReportCustomerMovementMapper::fromEntityToDomain);
+	}
 
-    private ReportCustomerMovementEntity toEntity(ReportCustomerMovement movement) {
-        return ReportCustomerMovementEntity.of(
-                movement.getId(),
-                movement.getFecha(),
-                movement.getClienteId(),
-                movement.getCliente(),
-                movement.getNumeroCuenta(),
-                movement.getTipo(),
-                movement.getSaldoInicial(),
-                movement.getEstado(),
-                movement.getValorMovimiento(),
-                movement.getTipoMovimiento(),
-                movement.getSaldoDisponible(),
-                movement.getCreatedAt()
-        );
-    }
-
-    private ReportCustomerMovement fromEntityToDomain(ReportCustomerMovementEntity entity) {
-        return ReportCustomerMovement.builder()
-                .id(entity.getId())
-                .fecha(entity.getFecha())
-                .clienteId(entity.getClienteId())
-                .cliente(entity.getCliente())
-                .numeroCuenta(entity.getNumeroCuenta())
-                .tipo(entity.getTipo())
-                .saldoInicial(entity.getSaldoInicial())
-                .estado(entity.getEstado())
-                .valorMovimiento(entity.getValorMovimiento())
-                .tipoMovimiento(entity.getTipoMovimiento())
-                .saldoDisponible(entity.getSaldoDisponible())
-                .createdAt(entity.getCreatedAt())
-                .build();
-    }
+	@Override
+	public Flux<ReportCustomerMovement> getAllMovementsByCustomerNameAndDateRange(String customerName, LocalDateTime startDate, LocalDateTime endDate) {
+		return repository.findByClienteAndDateRange(customerName, startDate, endDate)
+				.map(ReportCustomerMovementMapper::fromEntityToDomain);
+	}
 }

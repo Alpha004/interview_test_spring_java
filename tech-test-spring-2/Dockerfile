@@ -7,10 +7,10 @@ RUN mvn clean package -DskipTests && \
 
 FROM gcr.io/distroless/java21-debian12
 WORKDIR /app
-COPY --from=builder /target/*.jar tech-test-spring-customer.jar
-EXPOSE 8080
+COPY --from=builder /target/*.jar tech-test-spring-account-movement.jar
+EXPOSE 8081
 ENV SPRING_DATA_MYSQL_URL=
 ENV SPRING_DATA_MYSQL_USERNAME=
 ENV SPRING_DATA_MYSQL_PASSWORD=
 ENV KAFKA_HOST=
-ENTRYPOINT [ "java", "-jar", "tech-test-spring-customer.jar" ]
+ENTRYPOINT [ "java", "-jar", "tech-test-spring-account-movement.jar" ]

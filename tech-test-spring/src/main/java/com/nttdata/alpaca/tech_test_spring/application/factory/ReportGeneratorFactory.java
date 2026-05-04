@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class ReportGeneratorFactory {
+public final class ReportGeneratorFactory {
 
 	private final JsonReportGeneratorImpl jsonGenerator;
 	private final ExcelReportGeneratorImpl excelGenerator;

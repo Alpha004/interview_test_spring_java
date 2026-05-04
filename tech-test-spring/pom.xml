@@ -10,8 +10,9 @@
 	</parent>
 	<groupId>com.nttdata.alpaca</groupId>
 	<artifactId>tech-test-spring</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name/>
+	<version>1.0.0</version>
+	<name>tech-test-spring-customer</name>
+	<packaging>jar</packaging>
 	<description/>
 	<url/>
 	<licenses>
@@ -113,6 +114,11 @@
 		    <groupId>io.asyncer</groupId>
 		    <artifactId>r2dbc-mysql</artifactId>
 		    <version>1.4.1</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.poi</groupId>
+		    <artifactId>poi-ooxml</artifactId>
+		    <version>5.4.0</version>
 		</dependency>
 		<dependency>
 		    <groupId>com.intuit.karate</groupId>

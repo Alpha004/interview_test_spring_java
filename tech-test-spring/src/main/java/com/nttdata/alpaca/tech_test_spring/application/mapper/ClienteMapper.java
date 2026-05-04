@@ -56,17 +56,4 @@ public class ClienteMapper {
                 cliente.getEstado()
         );
     }
-    
-    public static ReportCustomerMovement fromAccountEventToEntity(MovementEventDTO accountEvent) {
-    	return ReportCustomerMovement.builder()				
-				.cliente(accountEvent.getCliente())
-				.numeroCuenta(accountEvent.getNumeroCuenta())
-				.tipo(accountEvent.getTipo())
-				.saldoInicial(accountEvent.getSaldoInicial())
-				.valorMovimiento(accountEvent.getValor())
-				.tipoMovimiento(accountEvent.getTipoMovimiento())
-				.saldoDisponible(accountEvent.getSaldo())
-				.estado(true)
-				.build();
-    }
 }

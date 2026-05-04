@@ -9,15 +9,14 @@ import lombok.Data;
 @Data
 @Builder
 public class ReportCustomerMovement {
-    private Long id;    
-    private Long clienteId;
+    private Long id;
     private String cliente;
     private String numeroCuenta;
     private String tipo;
-    private BigDecimal saldoInicial;
+    private Double saldoInicial;
     private Boolean estado;
-    private BigDecimal valorMovimiento;
+    private Double valorMovimiento;
     private String tipoMovimiento;
-    private BigDecimal saldoDisponible;
+    private Double saldoDisponible;
     private LocalDateTime createdAt;
 }

@@ -11,7 +11,8 @@
 	<groupId>com.nttdata.alpaca</groupId>
 	<artifactId>tech-test-spring-2</artifactId>
 	<version>1.0.0</version>
-	<name>tech-test-spring-2</name>
+	<name>tech-test-spring-account-movement</name>	
+	<packaging>jar</packaging>
 	<description>Aplicacion Backend para Cuentas y Movimientos </description>
 	<url/>
 	<licenses>

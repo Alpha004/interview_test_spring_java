@@ -1,6 +1,5 @@
 package com.nttdata.alpaca.tech_test_spring.infraestructure.entities;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import org.springframework.data.annotation.Id;
@@ -22,12 +21,6 @@ public class ReportCustomerMovementEntity {
     @Column("id")
     Long id;
 
-    @Column("fecha")
-    private LocalDateTime fecha;
-
-    @Column("cliente_id")
-    private Long clienteId;
-
     @Column("cliente")
     private String cliente;
 
@@ -38,19 +31,19 @@ public class ReportCustomerMovementEntity {
     private String tipo;
 
     @Column("saldo_inicial")
-    private BigDecimal saldoInicial;
+    private Double saldoInicial;
 
     @Column("estado")
     private Boolean estado;
 
     @Column("valor_movimiento")
-    private BigDecimal valorMovimiento;
+    private Double valorMovimiento;
 
     @Column("tipo_movimiento")
     private String tipoMovimiento;
 
     @Column("saldo_disponible")
-    private BigDecimal saldoDisponible;
+    private Double saldoDisponible;
 
     @Column("created_at")
     private LocalDateTime createdAt;

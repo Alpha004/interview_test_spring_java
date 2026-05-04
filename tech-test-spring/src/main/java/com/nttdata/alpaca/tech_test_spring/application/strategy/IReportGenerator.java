@@ -9,4 +9,6 @@ import reactor.core.publisher.Mono;
 public interface IReportGenerator {
 
 	Mono<Object> generate(List<ReportItem> data);
+	
+	boolean supports(String format);
 }

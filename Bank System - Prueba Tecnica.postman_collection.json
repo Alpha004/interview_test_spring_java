@@ -1,0 +1,597 @@
+{
+  "info": {
+    "_postman_id": "0527d8a8-cc70-4051-9754-514cdf3845e2",
+    "name": "Bank System - Prueba Tecnica",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "3660292"
+  },
+  "item": [
+    {
+      "name": "ApiGateway",
+      "item": [
+        {
+          "name": "HealthCheck Api-Gateway",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8009/actuator/health",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8009",
+              "path": [
+                "actuator",
+                "health"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Test Localhost",
+      "item": [
+        {
+          "name": "Customers",
+          "item": [
+            {
+              "name": "Get All Clients",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{host}}:{{puerto}}/v1/api/customers?page=0&size=20",
+                  "host": [
+                    "{{host}}"
+                  ],
+                  "port": "{{puerto}}",
+                  "path": [
+                    "v1",
+                    "api",
+                    "customers"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "20"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Save Client",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"nombre\": \"Jorge Quiroga Fuentes\",\r\n    \"genero\": \"masculino\",\r\n    \"identificacion\": \"46151945\",\r\n    \"direccion\": \"Urb Daniel Alcides Carrion G-3 JLBYR\",\r\n    \"telefono\": \"994222211\",\r\n    \"contrasenia\": \"12345Rtest$gF\"    \r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{host}}:{{puerto}}/v1/api/customers",
+                  "host": [
+                    "{{host}}"
+                  ],
+                  "port": "{{puerto}}",
+                  "path": [
+                    "v1",
+                    "api",
+                    "customers"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Client",
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"nombre\": \"Jorge Quiroga Fuentes\",\r\n    \"genero\": \"Femenino\",\r\n    \"identificacion\": \"46151945\",\r\n    \"direccion\": \"Urb Daniel Alcides Carrion G-3 JLBYR\",\r\n    \"telefono\": \"994222211\",\r\n    \"contrasenia\": \"12345Rtest$gF\"    \r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{host}}:{{puerto}}/v1/api/customers/:id",
+                  "host": [
+                    "{{host}}"
+                  ],
+                  "port": "{{puerto}}",
+                  "path": [
+                    "v1",
+                    "api",
+                    "customers",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "4"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Client By Id",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{host}}:{{puerto}}/v1/api/customers/:id",
+                  "host": [
+                    "{{host}}"
+                  ],
+                  "port": "{{puerto}}",
+                  "path": [
+                    "v1",
+                    "api",
+                    "customers",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "8"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Report By Client Id Customer",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{host}}:{{puerto}}/v1/api/customers/reports/:clientId?startDate=2026-05-03&endDate=2026-05-03&format=json",
+                  "host": [
+                    "{{host}}"
+                  ],
+                  "port": "{{puerto}}",
+                  "path": [
+                    "v1",
+                    "api",
+                    "customers",
+                    "reports",
+                    ":clientId"
+                  ],
+                  "query": [
+                    {
+                      "key": "startDate",
+                      "value": "2026-05-03"
+                    },
+                    {
+                      "key": "endDate",
+                      "value": "2026-05-03"
+                    },
+                    {
+                      "key": "format",
+                      "value": "json"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "key": "clientId",
+                      "value": "3"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Client By Id",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{host}}:{{puerto}}/v1/api/customers/:id",
+                  "host": [
+                    "{{host}}"
+                  ],
+                  "port": "{{puerto}}",
+                  "path": [
+                    "v1",
+                    "api",
+                    "customers",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "7"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Health Check",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"nombre\": \"Jorge Quiroga Fuentes\",\r\n    \"genero\": \"Femenino\",\r\n    \"identificacion\": \"46151945\",\r\n    \"direccion\": \"Urb Daniel Alcides Carrion G-3 JLBYR\",\r\n    \"telefono\": \"994222211\",\r\n    \"contrasenia\": \"12345Rtest$gF\"    \r\n}"
+                },
+                "url": {
+                  "raw": "{{host}}:{{puerto}}/actuator/health",
+                  "host": [
+                    "{{host}}"
+                  ],
+                  "port": "{{puerto}}",
+                  "path": [
+                    "actuator",
+                    "health"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Accounts",
+          "item": [
+            {
+              "name": "Get All Accounts",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{host}}:{{puertoAPIGateway}}/v1/api/accounts?page=0&size=20",
+                  "host": [
+                    "{{host}}"
+                  ],
+                  "port": "{{puertoAPIGateway}}",
+                  "path": [
+                    "v1",
+                    "api",
+                    "accounts"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "20"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Save Account",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"numeroCuenta\": \"1122334455\",\r\n    \"tipo\": \"AHORRO\",\r\n    \"saldoInicial\": 10.0,    \r\n    \"clienteNombre\": \"Juan Osorio\"    \r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{host}}:{{puertoAPIGateway}}/v1/api/accounts",
+                  "host": [
+                    "{{host}}"
+                  ],
+                  "port": "{{puertoAPIGateway}}",
+                  "path": [
+                    "v1",
+                    "api",
+                    "accounts"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Account By Id",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{host}}:{{puertoAPIGateway}}/v1/api/accounts/:id",
+                  "host": [
+                    "{{host}}"
+                  ],
+                  "port": "{{puertoAPIGateway}}",
+                  "path": [
+                    "v1",
+                    "api",
+                    "accounts",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "5"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Account By Id",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{host}}:{{puertoAPIGateway}}/v1/api/accounts/:id",
+                  "host": [
+                    "{{host}}"
+                  ],
+                  "port": "{{puertoAPIGateway}}",
+                  "path": [
+                    "v1",
+                    "api",
+                    "accounts",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "100"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Account By Id",
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"numeroCuenta\": \"123322435345\",\r\n    \"tipo\": \"AHORRO\",\r\n    \"saldoInicial\": 10.0,    \r\n    \"clienteNombre\": \"Jesus Alpaca Rendon\",\r\n    \"estado\": false    \r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{host}}:{{puertoAPIGateway}}/v1/api/accounts/:id",
+                  "host": [
+                    "{{host}}"
+                  ],
+                  "port": "{{puertoAPIGateway}}",
+                  "path": [
+                    "v1",
+                    "api",
+                    "accounts",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "5"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Movements",
+          "item": [
+            {
+              "name": "Get Movement By Numero Cuenta",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{host}}:{{puertoAPIGateway}}/v1/api/movements/account/:numeroCuenta",
+                  "host": [
+                    "{{host}}"
+                  ],
+                  "port": "{{puertoAPIGateway}}",
+                  "path": [
+                    "v1",
+                    "api",
+                    "movements",
+                    "account",
+                    ":numeroCuenta"
+                  ],
+                  "variable": [
+                    {
+                      "key": "numeroCuenta",
+                      "value": "846843841644"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Movement By Id",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{host}}:{{puertoAPIGateway}}/v1/api/movements/:id",
+                  "host": [
+                    "{{host}}"
+                  ],
+                  "port": "{{puertoAPIGateway}}",
+                  "path": [
+                    "v1",
+                    "api",
+                    "movements",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "1"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Last Movement By Numero Cuenta",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{host}}:{{puertoAPIGateway}}/v1/api/movements/account/:numeroCuenta/last",
+                  "host": [
+                    "{{host}}"
+                  ],
+                  "port": "{{puertoAPIGateway}}",
+                  "path": [
+                    "v1",
+                    "api",
+                    "movements",
+                    "account",
+                    ":numeroCuenta",
+                    "last"
+                  ],
+                  "variable": [
+                    {
+                      "key": "numeroCuenta",
+                      "value": "846843841644"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Save Movement",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"numeroCuenta\": \"5555566666\",\r\n    \"valor\": 25.0,\r\n    \"tipoMovimiento\": \"CREDITO\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{host}}:{{puertoAPIGateway}}/v1/api/movements",
+                  "host": [
+                    "{{host}}"
+                  ],
+                  "port": "{{puertoAPIGateway}}",
+                  "path": [
+                    "v1",
+                    "api",
+                    "movements"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Eureka Server",
+      "item": [
+        {
+          "name": "Health Check Eureka Server",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8761/actuator/health",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8761",
+              "path": [
+                "actuator",
+                "health"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "host",
+      "value": ""
+    },
+    {
+      "key": "puerto",
+      "value": ""
+    },
+    {
+      "key": "puertoAPIGateway",
+      "value": ""
+    }
+  ]
+}

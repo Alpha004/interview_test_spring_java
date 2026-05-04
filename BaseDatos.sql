@@ -9,19 +9,6 @@ CREATE TABLE IF NOT EXISTS Cliente (
     estado BIT NOT NULL DEFAULT 1,
     telefono VARCHAR(20) NOT NULL,    
     direccion VARCHAR(255) NOT NULL
-    -- creation_date DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT 'Fecha y hora de creacion del cliente en la bd'
-);
-
-CREATE TABLE IF NOT EXISTS Cliente (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL,
-    genero VARCHAR(20) NOT NULL,
-    dni VARCHAR(20) UNIQUE NOT NULL,
-    contrasenia VARCHAR(100) NOT NULL,
-    estado BIT NOT NULL DEFAULT 1,
-    telefono VARCHAR(20) NOT NULL,    
-    direccion VARCHAR(255) NOT NULL
-    -- creation_date DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT 'Fecha y hora de creacion del cliente en la bd'
 );
 
 CREATE TABLE report_customer_movements (
@@ -39,9 +26,6 @@ CREATE TABLE report_customer_movements (
     INDEX idx_numero_cuenta (numero_cuenta)
 );
 
--- =====================================
--- TABLA: ACCOUNTS
--- =====================================
 CREATE TABLE Accounts (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     numero_cuenta VARCHAR(20) NOT NULL UNIQUE,
@@ -49,16 +33,10 @@ CREATE TABLE Accounts (
     saldo_inicial DECIMAL(12,2) NOT NULL,
     estado BOOLEAN NOT NULL DEFAULT TRUE,
     cliente_nombre VARCHAR(100) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_accounts_cliente (cliente_nombre)
 );
 
--- Índice para búsquedas por cliente
-CREATE INDEX idx_accounts_cliente ON Accounts(cliente_nombre);
-
-
--- =====================================
--- TABLA: MOVEMENTS
--- =====================================
 CREATE TABLE Movements (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     numero_cuenta VARCHAR(20) NOT NULL,
@@ -69,17 +47,12 @@ CREATE TABLE Movements (
     saldo DECIMAL(12,2) NOT NULL,
     estado BOOLEAN NOT NULL DEFAULT TRUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-
-    -- Relación con accounts
+    INDEX idx_movements_numero_cuenta(numero_cuenta),
     CONSTRAINT fk_movements_account
         FOREIGN KEY (numero_cuenta)
         REFERENCES Accounts(numero_cuenta)
         ON DELETE CASCADE
 );
-
--- Índices para performance
-CREATE INDEX idx_movements_numero_cuenta ON Movements(numero_cuenta);
-CREATE INDEX idx_movements_fecha ON Movements(created_at);
 
 USE pichincha_interv;
 DROP TABLE Cliente;
@@ -104,5 +77,5 @@ COMMIT;
 DELETE FROM Accounts where id >2;
 COMMIT;
 
-DELETE FROM Movements where id >2;
+DELETE FROM Movements where id >=12;
 COMMIT;
