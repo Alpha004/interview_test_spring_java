@@ -1,27 +1,31 @@
 package com.nttdata.alpaca.tech_test_spring_2.controller;
 
-import com.nttdata.alpaca.tech_test_spring_2.application.mapper.AccountMapper;
 import com.nttdata.alpaca.tech_test_spring_2.application.services.AccountService;
+import com.nttdata.alpaca.tech_test_spring_2.config.exceptions.custom.NotFoundException;
 import com.nttdata.alpaca.tech_test_spring_2.domain.models.Account;
 import com.nttdata.alpaca.tech_test_spring_2.infraestructure.dto.AccountRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
-import org.springframework.boot.test.mock.bean.MockBean;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.when;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
-
-@WebFluxTest(AccountRestController.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureWebTestClient
 class AccountControllerTestCase {
 
     @Autowired
     private WebTestClient webTestClient;
 
-    @MockBean
+    @MockitoBean
     private AccountService accountService;
 
     @Test
@@ -33,7 +37,7 @@ class AccountControllerTestCase {
         account.setEstado(true);
         account.setClienteNombre("Jose Lema");
 
-        org.mockito.Mockito.when(accountService.getAccounts(org.mockito.any()))
+        when(accountService.getAccounts(any()))
                 .thenReturn(Flux.just(account));
 
         webTestClient.get()
@@ -56,7 +60,7 @@ class AccountControllerTestCase {
         account.setEstado(true);
         account.setClienteNombre("Jose Lema");
 
-        org.mockito.Mockito.when(accountService.getAccountById(1L))
+        when(accountService.getAccountById(1L))
                 .thenReturn(Mono.just(account));
 
         webTestClient.get()
@@ -70,8 +74,8 @@ class AccountControllerTestCase {
 
     @Test
     void testGetAccountByIdNotFound() {
-        org.mockito.Mockito.when(accountService.getAccountById(99L))
-                .thenReturn(Mono.empty());
+        when(accountService.getAccountById(99L))
+                .thenReturn(Mono.error(new NotFoundException("Account not found with id: " + 99L)));
 
         webTestClient.get()
                 .uri("/v1/api/accounts/99")
@@ -88,7 +92,7 @@ class AccountControllerTestCase {
         account.setEstado(true);
         account.setClienteNombre("Jose Lema");
 
-        org.mockito.Mockito.when(accountService.saveAccount(org.mockito.any(Account.class)))
+        when(accountService.saveAccount(any(Account.class)))
                 .thenReturn(Mono.just(account));
 
         webTestClient.post()
@@ -112,7 +116,7 @@ class AccountControllerTestCase {
         account.setEstado(true);
         account.setClienteNombre("Jose Lema");
 
-        org.mockito.Mockito.when(accountService.updateAccount(org.mockito.eq(1L), org.mockito.any(Account.class)))
+        when(accountService.updateAccount(eq(1L), any(Account.class)))
                 .thenReturn(Mono.just(account));
 
         webTestClient.put()
@@ -128,7 +132,7 @@ class AccountControllerTestCase {
 
     @Test
     void testDeleteAccount() {
-        org.mockito.Mockito.when(accountService.deleteAccount(1L))
+        when(accountService.deleteAccount(1L))
                 .thenReturn(Mono.empty());
 
         webTestClient.delete()

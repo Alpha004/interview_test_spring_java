@@ -4,22 +4,29 @@ import com.nttdata.alpaca.tech_test_spring_2.application.services.MovementServic
 import com.nttdata.alpaca.tech_test_spring_2.config.utils.TipoMovement;
 import com.nttdata.alpaca.tech_test_spring_2.domain.models.Movement;
 import com.nttdata.alpaca.tech_test_spring_2.infraestructure.dto.MovementRequest;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
-import org.springframework.boot.test.mock.bean.MockBean;
+
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-@WebFluxTest(MovementRestController.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureWebTestClient
 class MovementControllerTestCase {
 
     @Autowired
     private WebTestClient webTestClient;
 
-    @MockBean
+    @MockitoBean
     private MovementService movementService;
 
     @Test
@@ -40,7 +47,7 @@ class MovementControllerTestCase {
         movement2.setTipoMovimiento(TipoMovement.DEBITO);
         movement2.setSaldo(1300.0);
 
-        org.mockito.Mockito.when(movementService.getMovementsByAccount("1234567890"))
+        when(movementService.getMovementsByAccount("1234567890"))
                 .thenReturn(Flux.just(movement1, movement2));
 
         webTestClient.get()
@@ -64,7 +71,7 @@ class MovementControllerTestCase {
         movement.setTipoMovimiento(TipoMovement.CREDITO);
         movement.setSaldo(1500.0);
 
-        org.mockito.Mockito.when(movementService.getMovementById(1L))
+        when(movementService.getMovementById(1L))
                 .thenReturn(Mono.just(movement));
 
         webTestClient.get()
@@ -82,7 +89,7 @@ class MovementControllerTestCase {
         movement.setSaldo(1300.0);
         movement.setTipoCuenta("AHORRO");
 
-        org.mockito.Mockito.when(movementService.getLastMovementByAccount("1234567890"))
+        when(movementService.getLastMovementByAccount("1234567890"))
                 .thenReturn(Mono.just(movement));
 
         webTestClient.get()
@@ -104,7 +111,7 @@ class MovementControllerTestCase {
         movement.setTipoMovimiento(TipoMovement.CREDITO);
         movement.setSaldo(1500.0);
 
-        org.mockito.Mockito.when(movementService.saveMovement(org.mockito.any(Movement.class)))
+        when(movementService.saveMovement(any(Movement.class)))
                 .thenReturn(Mono.just(movement));
 
         webTestClient.post()

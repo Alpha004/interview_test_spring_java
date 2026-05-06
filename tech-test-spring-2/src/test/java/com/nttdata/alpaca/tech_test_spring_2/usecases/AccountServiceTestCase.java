@@ -1,5 +1,6 @@
 package com.nttdata.alpaca.tech_test_spring_2.usecases;
 
+import com.nttdata.alpaca.tech_test_spring_2.config.exceptions.custom.NotFoundException;
 import com.nttdata.alpaca.tech_test_spring_2.application.usecases.CreateAccountUseCaseImpl;
 import com.nttdata.alpaca.tech_test_spring_2.application.usecases.GetAllAccountsUseCaseImpl;
 import com.nttdata.alpaca.tech_test_spring_2.application.usecases.GetAccountByIdUseCaseImpl;
@@ -16,7 +17,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import java.util.List;
+import static org.mockito.Mockito.when;
 
 class AccountServiceTestCase {
 
@@ -46,7 +47,7 @@ class AccountServiceTestCase {
         account.setClienteNombre("Jose Lema");
         account.setEstado(true);
 
-        Mockito.when(accountRepositoryPort.saveAccount(account))
+        when(accountRepositoryPort.saveAccount(account))
                 .thenReturn(Mono.just(account));
 
         StepVerifier.create(createAccountUseCase.createAccount(account))
@@ -72,7 +73,7 @@ class AccountServiceTestCase {
         account2.setTipo("CORRIENTE");
         account2.setSaldoInicial(5000.0);
 
-        Mockito.when(accountRepositoryPort.findAllAccounts(pageable))
+        Mockito.when(accountRepositoryPort.getAllAccounts(pageable))
                 .thenReturn(Flux.just(account1, account2));
 
         StepVerifier.create(getAllAccountsUseCase.getAllAccounts(pageable))
@@ -84,7 +85,7 @@ class AccountServiceTestCase {
     void testGetAllAccountsEmpty() {
         Pageable pageable = PageRequest.of(0, 10);
 
-        Mockito.when(accountRepositoryPort.findAllAccounts(pageable))
+        Mockito.when(accountRepositoryPort.getAllAccounts(pageable))
                 .thenReturn(Flux.empty());
 
         StepVerifier.create(getAllAccountsUseCase.getAllAccounts(pageable))
@@ -100,7 +101,7 @@ class AccountServiceTestCase {
         account.setTipo("AHORRO");
         account.setSaldoInicial(1000.0);
 
-        Mockito.when(accountRepositoryPort.findById(1L))
+        Mockito.when(accountRepositoryPort.getAccountById(1L))
                 .thenReturn(Mono.just(account));
 
         StepVerifier.create(getAccountByIdUseCase.getAccountById(1L))
@@ -113,11 +114,13 @@ class AccountServiceTestCase {
 
     @Test
     void testGetAccountByIdNotFound() {
-        Mockito.when(accountRepositoryPort.findById(99L))
+        when(accountRepositoryPort.getAccountById(99L))
                 .thenReturn(Mono.empty());
 
         StepVerifier.create(getAccountByIdUseCase.getAccountById(99L))
-                .verifyComplete();
+	        .expectErrorMatches(throwable -> throwable instanceof NotFoundException &&
+	                throwable.getMessage().equals("Account not found with id: " + 99L))
+	        .verify();
     }
 
     @Test
@@ -141,8 +144,11 @@ class AccountServiceTestCase {
         resultAccount.setSaldoInicial(2000.0);
         resultAccount.setClienteNombre("Jose Lema");
         resultAccount.setEstado(true);
+        
+        when(accountRepositoryPort.getAccountById(1L))
+        .thenReturn(Mono.just(existingAccount));
 
-        Mockito.when(accountRepositoryPort.updateAccount(1L, updatedAccount))
+        when(accountRepositoryPort.updateAccount(1L, updatedAccount))
                 .thenReturn(Mono.just(resultAccount));
 
         StepVerifier.create(updateAccountUseCase.updateAccount(1L, updatedAccount))
@@ -156,12 +162,12 @@ class AccountServiceTestCase {
 
     @Test
     void testDeleteAccount() {
-        Mockito.when(accountRepositoryPort.deleteById(1L))
+        Mockito.when(accountRepositoryPort.deleteAccountById(1L))
                 .thenReturn(Mono.empty());
 
         StepVerifier.create(deleteAccountUseCase.deleteAccountById(1L))
                 .verifyComplete();
 
-        Mockito.verify(accountRepositoryPort).deleteById(1L);
+        Mockito.verify(accountRepositoryPort).deleteAccountById(1L);
     }
 }
